@@ -1,0 +1,12 @@
+<svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo icon (left side) -->
+  <g>
+    <circle cx="24" cy="24" r="20" fill="#4A6CF7"/>
+    <path d="M24 11L30 28H18L24 11Z" fill="#fff"/>
+    <circle cx="34" cy="13" r="2" fill="#fff"/>
+  </g>
+  <!-- Logo text (right side) -->
+  <text x="50" y="33" font-family="Inter, Arial, Helvetica, sans-serif" font-weight="bold" font-size="28" fill="#1A2447" letter-spacing="1">
+    mediBuddy
+  </text>
+</svg>
