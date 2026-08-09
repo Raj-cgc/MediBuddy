@@ -8,7 +8,10 @@ export const DoctorContext = createContext();
 
 const DoctorContextProvider = (props) => {
 
-    const rawBackendUrl = import.meta.env.VITE_BACKEND_URL || 'https://medibuddy-chi.vercel.app'
+    let rawBackendUrl = import.meta.env.VITE_BACKEND_URL;
+    if (!rawBackendUrl || rawBackendUrl.includes('localhost') || rawBackendUrl.includes('127.0.0.1')) {
+        rawBackendUrl = 'https://medibuddy-chi.vercel.app';
+    }
     const backendUrl = rawBackendUrl.replace(/\/$/, '')
 
     const [dToken, setDToken] = useState(localStorage.getItem('dToken') ? localStorage.getItem('dToken') : '')
