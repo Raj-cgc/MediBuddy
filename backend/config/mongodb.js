@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-const atlasUri = 'mongodb+srv://rajkumarbxr78_db_user:2hQIme7F7veEgwvh@cluster0.5malcff.mongodb.net/medibuddy?retryWrites=true&w=majority';
-
 let connPromise = null;
 
 const connectDB = async () => {
@@ -12,13 +10,8 @@ const connectDB = async () => {
     }
 
     if (!connPromise) {
-        let uri = atlasUri;
-        if (process.env.MONGODB_URI) {
-            let envUri = process.env.MONGODB_URI.trim().replace(/^['"]|['"]$/g, '');
-            if (envUri.includes('5malcff')) {
-                uri = envUri;
-            }
-        }
+        let uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medibuddy';
+        uri = String(uri).trim().replace(/^['"]|['"]$/g, '');
 
         connPromise = mongoose.connect(uri, {
             dbName: 'medibuddy'
