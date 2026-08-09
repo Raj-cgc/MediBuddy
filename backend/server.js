@@ -7,28 +7,37 @@ import adminRouter from './routes/adminRoute.js';
 import doctorRouter from './routes/doctorRoute.js';
 import userRouter from './routes/userRoutes.js';
 
-
 //app config
 const app = express();
 const port = process.env.PORT || 4000;
-connectDB();
+
 connectCloudinary();
 
 //middlewares
 app.use(express.json());
 app.use(cors());
 
-//api endpoints
-
-app.use('/api/admin', adminRouter);
-app.use('/api/doctor', doctorRouter)
-app.use('/api/user', userRouter)
-
-app.get('/', (req, res) => {
-    res.send('api working')
+// Ensure DB is connected for Vercel serverless requests
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.error("Database connection error in middleware:", err);
+    }
+    next();
 });
 
-app.listen(port, () => console.log('Server Started', port));
+//api endpoints
+app.use('/api/admin', adminRouter);
+app.use('/api/doctor', doctorRouter);
+app.use('/api/user', userRouter);
+
+app.get('/', (req, res) => {
+    res.send('api working');
+});
+
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => console.log('Server Started', port));
+}
 
 export default app;
-
