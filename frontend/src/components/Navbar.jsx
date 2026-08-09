@@ -7,6 +7,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { token, setToken, userData } = useContext(AppContext);
     const [showMenu, setShowMenu] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
 
     const logout = () => {
         setToken(false)
@@ -50,21 +51,38 @@ const Navbar = () => {
                 {/* Right Action / Profile */}
                 <div className='flex items-center gap-3'>
                     {token && userData ? (
-                        <div className='flex items-center gap-2.5 cursor-pointer group relative bg-emerald-50/80 hover:bg-emerald-100/70 py-1.5 px-3 rounded-full border border-emerald-100 transition-all'>
-                            <img className='w-8 h-8 rounded-full object-cover border border-teal-500/30' src={userData.image || assets.profile_pic} alt="User Avatar" />
-                            <span className='text-xs font-semibold text-slate-700 max-w-[100px] truncate hidden sm:inline-block'>{userData.name}</span>
-                            <img className='w-2.5 opacity-60 group-hover:rotate-180 transition-transform' src={assets.dropdown_icon} alt="" />
+                        <div 
+                            onClick={() => setShowProfileMenu(prev => !prev)}
+                            className='flex items-center gap-2 cursor-pointer group relative bg-emerald-50/90 hover:bg-emerald-100/80 py-1.5 px-2.5 sm:px-3 rounded-full border border-emerald-200/80 transition-all select-none'
+                        >
+                            <img className='w-8 h-8 rounded-full object-cover border-2 border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
+                            <span className='text-xs font-bold text-slate-700 max-w-[100px] truncate hidden sm:inline-block'>{userData.name}</span>
+                            <img className={`w-2.5 opacity-70 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : 'group-hover:rotate-180'}`} src={assets.dropdown_icon} alt="" />
                             
-                            <div className='absolute top-full right-0 pt-3 text-sm font-medium text-slate-700 z-30 hidden group-hover:block w-52 animate-fadeIn'>
-                                <div className='bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-xl border border-emerald-100 flex flex-col gap-1'>
-                                    <button onClick={() => navigate('/my-profile')} className='flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors'>
+                            {/* Profile Dropdown Menu - Explicitly toggling on click for touch screen phones */}
+                            <div className={`absolute top-full right-0 pt-2 text-sm font-medium text-slate-700 z-50 w-56 animate-fadeIn ${showProfileMenu ? 'block' : 'hidden group-hover:block'}`}>
+                                <div className='bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-2xl border border-emerald-100 flex flex-col gap-1'>
+                                    <div className='px-3 py-2 border-b border-slate-100 mb-1 sm:hidden'>
+                                        <p className='text-xs font-extrabold text-slate-900 truncate'>{userData.name}</p>
+                                        <p className='text-[10px] text-slate-500 truncate'>{userData.email}</p>
+                                    </div>
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-profile'); }} 
+                                        className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
+                                    >
                                         <span>👤</span> My Profile
                                     </button>
-                                    <button onClick={() => navigate('/my-appointments')} className='flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors'>
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-appointments'); }} 
+                                        className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
+                                    >
                                         <span>📅</span> My Appointments
                                     </button>
                                     <div className='h-px bg-slate-100 my-1'></div>
-                                    <button onClick={logout} className='flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 text-red-600 text-left transition-colors'>
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); logout(); }} 
+                                        className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 text-left transition-colors font-bold text-xs sm:text-sm'
+                                    >
                                         <span>🚪</span> Logout
                                     </button>
                                 </div>
