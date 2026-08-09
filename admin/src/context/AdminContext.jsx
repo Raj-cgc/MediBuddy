@@ -13,7 +13,7 @@ const AdminContextProvider = (props) => {
     const [appointments, setAppointments] = useState([])
     const [dashData, setDashData] = useState(false)
 
-    const rawBackendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+    const rawBackendUrl = import.meta.env.VITE_BACKEND_URL || 'https://medibuddy-chi.vercel.app';
     const backendUrl = rawBackendUrl.replace(/\/$/, '');
 
     const getAllDoctors = async () => {
