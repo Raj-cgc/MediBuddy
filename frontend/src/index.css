@@ -1,31 +1,83 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Outfit:wght@100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 @import "tailwindcss";
 
 * {
-    font-family: Outfit;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: #f2faf5;
+    background-image: 
+        radial-gradient(at 5% 5%, rgba(207, 244, 252, 0.6) 0px, transparent 50%),
+        radial-gradient(at 95% 15%, rgba(209, 250, 229, 0.6) 0px, transparent 50%),
+        radial-gradient(at 40% 50%, rgba(230, 247, 240, 0.5) 0px, transparent 60%),
+        radial-gradient(at 85% 85%, rgba(207, 244, 252, 0.5) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #1e293b;
+    min-height: 100vh;
+}
+
+.font-serif-accent {
+    font-family: 'Playfair Display', Georgia, serif;
 }
 
 @theme {
-    --color-primary: #5f6FFF;
+    --color-primary: #0d9488;
+    --color-primary-dark: #0f766e;
+    --color-primary-light: #14b8a6;
+    --color-emerald-accent: #059669;
+    --color-mint-bg: #eaf6f0;
 }
 
 @utility grid-cols-auto {
-    grid-template-columns:
-        repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+@utility glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 20px 40px -15px rgba(13, 148, 136, 0.08);
+}
+
+@utility glass-pill {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes float-medium {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+}
+
+.animate-float-slow {
+    animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-float-medium {
+    animation: float-medium 5s ease-in-out infinite 1s;
 }
 
 .active hr {
-    @apply block
+    @apply block;
 }
 
 ::-webkit-scrollbar {
-    @apply hidden
+    @apply hidden;
 }
 
-@media (max-width:740px) {
+@media (max-width: 740px) {
     .active p {
-        @apply text-white bg-primary
+        @apply text-white bg-teal-600;
     }
 }

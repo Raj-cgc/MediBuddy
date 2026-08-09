@@ -1,13 +1,9 @@
-import React from 'react'
-import { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { DoctorContext } from '../../context/DoctorContext'
-import { useEffect } from 'react'
-import { assets } from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
 
 const DoctorDashboard = () => {
-
-    const { dToken, dashData, setDashData, getDashData, completeAppointment, cancelAppointment } = useContext(DoctorContext)
+    const { dToken, dashData, getDashData, completeAppointment, cancelAppointment } = useContext(DoctorContext)
     const { currencySymbol, slotDateFormat } = useContext(AppContext)
 
     useEffect(() => {
@@ -17,63 +13,102 @@ const DoctorDashboard = () => {
     }, [dToken])
 
     return dashData && (
-        <div className='m-5'>
+        <div className='w-full p-4 sm:p-8 text-left text-slate-800'>
+            
+            {/* Header */}
+            <div className='flex flex-col items-start gap-1.5 mb-8'>
+                <span className='px-3.5 py-1 rounded-full bg-emerald-100/80 text-emerald-900 text-xs font-extrabold uppercase tracking-wider border border-emerald-200'>
+                    Doctor Overview
+                </span>
+                <h1 className='text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-1'>
+                    Doctor <span className='font-serif-accent italic font-normal text-teal-700'>Dashboard</span>
+                </h1>
+                <p className='text-sm sm:text-base text-slate-600 font-medium'>
+                    Real-time breakdown of earnings, active appointments, and patient consultations.
+                </p>
+            </div>
 
-            <div className='flex flex-wrap gap-3'>
-                <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-                    <img className='w-14' src={assets.earning_icon} alt="" />
-                    <div>
-                        <p className='text-xl font-semibold text-gray-600'>{currencySymbol} {dashData.earnings}</p>
-                        <p className='text-gray-400 '>Earnings</p>
+            {/* Metrics Row */}
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8'>
+                
+                {/* Earnings Card */}
+                <div className='bg-white p-6 rounded-3xl border border-emerald-100/90 shadow-sm hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5 cursor-pointer'>
+                    <div className='w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-3xl font-bold shadow-xs'>
+                        💰
+                    </div>
+                    <div className='flex flex-col'>
+                        <span className='text-3xl sm:text-4xl font-extrabold text-slate-900'>{currencySymbol}{dashData.earnings}</span>
+                        <span className='text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mt-0.5'>Total Earnings</span>
                     </div>
                 </div>
-                <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-                    <img className='w-14' src={assets.appointments_icon} alt="" />
-                    <div>
-                        <p className='text-xl font-semibold text-gray-600'>{dashData.appointments}</p>
-                        <p className='text-gray-400 '>Appointments</p>
+
+                {/* Appointments Card */}
+                <div className='bg-white p-6 rounded-3xl border border-emerald-100/90 shadow-sm hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5 cursor-pointer'>
+                    <div className='w-16 h-16 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center text-3xl font-bold shadow-xs'>
+                        📅
+                    </div>
+                    <div className='flex flex-col'>
+                        <span className='text-3xl sm:text-4xl font-extrabold text-slate-900'>{dashData.appointments}</span>
+                        <span className='text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mt-0.5'>Appointments</span>
                     </div>
                 </div>
-                <div className='flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-                    <img className='w-14' src={assets.patients_icon} alt="" />
-                    <div>
-                        <p className='text-xl font-semibold text-gray-600'>{dashData.patients}</p>
-                        <p className='text-gray-400 '>Patients</p>
+
+                {/* Patients Card */}
+                <div className='bg-white p-6 rounded-3xl border border-emerald-100/90 shadow-sm hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5 cursor-pointer'>
+                    <div className='w-16 h-16 rounded-2xl bg-cyan-50 text-cyan-700 flex items-center justify-center text-3xl font-bold shadow-xs'>
+                        👥
+                    </div>
+                    <div className='flex flex-col'>
+                        <span className='text-3xl sm:text-4xl font-extrabold text-slate-900'>{dashData.patients}</span>
+                        <span className='text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mt-0.5'>Unique Patients</span>
                     </div>
                 </div>
 
             </div>
 
-            <div className='bg-white'>
-                <div className='flex items-center gap-2.5 px-4 py-4 mt-10 rounded-t border'>
-                    <img src={assets.list_icon} alt="" />
-                    <p className='font-semibold'>Latest Bookings</p>
+            {/* Latest Appointments Card */}
+            <div className='w-full bg-white rounded-3xl border border-emerald-100/90 shadow-sm overflow-hidden'>
+                <div className='flex items-center gap-3 px-6 py-5 bg-gradient-to-r from-emerald-50 to-teal-50/40 border-b border-emerald-100'>
+                    <span className='text-xl'>📋</span>
+                    <h2 className='font-extrabold text-slate-900 text-lg sm:text-xl tracking-tight'>Recent Patient Consultations</h2>
                 </div>
 
-                <div className='pt-4 border border-t-0'>
-                    {
-                        dashData.latestAppointments.map((item, index) => (
-                            <div className='flex items-center px-6 py-3 gap-3 hover:bg-gray-100' key={index}>
-                                <img className='rounded-full w-10' src={item.userData.image} alt="" />
-                                <div className='flex-1 text-sm'>
-                                    <p className='text-gray-800 font-medium'>{item.userData.name}</p>
-                                    <p className='text-gray-600'>{slotDateFormat(item.slotDate)}</p>
+                <div className='divide-y divide-slate-100'>
+                    {dashData.latestAppointments.map((item, index) => (
+                        <div className='flex items-center justify-between px-6 py-4.5 hover:bg-emerald-50/30 transition-colors' key={index}>
+                            <div className='flex items-center gap-4'>
+                                <img className='rounded-2xl w-12 h-12 object-cover border border-emerald-100 bg-emerald-50' src={item.userData?.image} alt="" />
+                                <div className='flex flex-col text-sm sm:text-base'>
+                                    <p className='text-slate-900 font-extrabold'>{item.userData?.name}</p>
+                                    <p className='text-slate-500 font-medium text-xs sm:text-sm'>{slotDateFormat(item.slotDate)}</p>
                                 </div>
-                                {
-                                    item.cancelled
-                                        ? <p className='text-red-400 text-xs font-medium'>Cancelled</p>
-                                        : item.isCompleted
-                                            ? <p className='text-green-500 text-xs font-medium'>Completed</p>
-                                            : <div className='flex'>
-                                                <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
-                                                <img onClick={() => completeAppointment(item._id)} className='w-10 cursor-pointer' src={assets.tick_icon} alt="" />
-                                            </div>
-                                }
                             </div>
-                        ))
-                    }
-                </div>
 
+                            <div>
+                                {item.cancelled ? (
+                                    <span className='px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-xs sm:text-sm font-extrabold border border-red-200'>Cancelled</span>
+                                ) : item.isCompleted ? (
+                                    <span className='px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs sm:text-sm font-extrabold border border-emerald-200'>✓ Completed</span>
+                                ) : (
+                                    <div className='flex items-center gap-2.5'>
+                                        <button 
+                                            onClick={() => cancelAppointment(item._id)} 
+                                            className='px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 font-bold text-xs sm:text-sm border border-slate-200 transition-colors'
+                                        >
+                                            Cancel ✕
+                                        </button>
+                                        <button 
+                                            onClick={() => completeAppointment(item._id)} 
+                                            className='px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs sm:text-sm shadow-xs transition-all'
+                                        >
+                                            Complete ✓
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
         </div>

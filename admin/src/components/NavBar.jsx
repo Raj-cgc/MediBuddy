@@ -1,12 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { assets } from '../assets/assets'
-import { useContext } from 'react'
 import { AdminContext } from '../context/AdminContext'
 import { useNavigate } from 'react-router-dom'
 import { DoctorContext } from '../context/DoctorContext'
 
 const NavBar = () => {
-
     const { aToken, setAToken } = useContext(AdminContext)
     const { dToken, setDToken } = useContext(DoctorContext)
 
@@ -21,13 +19,34 @@ const NavBar = () => {
     }
 
     return (
-        <div className='flex justify-between items-center px-4 sm:px-10 py-3 border-b bg-white'>
-            <div className='flex items-center gap-2 text-xs'>
-                <img className='w-36 sm:w-40 cursor-pointer' src={assets.admin_logo} alt="" />
-                <p className='border px-2.5 py-0.5 rounded-full border-gray-500 text-gray-600'>{aToken ? 'Admin' : 'Doctor'}</p>
+        <header className='sticky top-0 z-50 backdrop-blur-md bg-white/85 border-b border-emerald-100/80 px-4 sm:px-8 py-3.5 shadow-xs'>
+            <div className='max-w-7xl mx-auto flex justify-between items-center'>
+                
+                {/* Brand Logo & Role Tag */}
+                <div className='flex items-center gap-3 cursor-pointer' onClick={() => navigate('/')}>
+                    <div className='w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-teal-500/20'>
+                        <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
+                        </svg>
+                    </div>
+                    <span className='text-xl font-bold tracking-tight text-slate-800'>
+                        medi<span className='text-teal-600 font-extrabold'>Buddy</span>
+                    </span>
+                    <span className='px-3 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 text-[11px] font-extrabold border border-emerald-200/80 uppercase tracking-wider ml-1'>
+                        {aToken ? 'Admin Portal' : 'Doctor Portal'}
+                    </span>
+                </div>
+
+                {/* Logout Button */}
+                <button 
+                    onClick={logout} 
+                    className='bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-700 hover:to-emerald-600 text-white font-extrabold text-xs px-7 py-2.5 rounded-full shadow-md shadow-teal-600/20 hover:shadow-lg transition-all duration-300 cursor-pointer'
+                >
+                    Logout
+                </button>
+
             </div>
-            <button onClick={logout} className='bg-primary text-white text-sm px-10 py-2 rounded-full cursor-pointer'>Logout</button>
-        </div>
+        </header>
     )
 }
 

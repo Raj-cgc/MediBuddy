@@ -5,56 +5,103 @@ import { assets } from '../assets/assets';
 import { DoctorContext } from '../context/DoctorContext';
 
 const Sidebar = () => {
-
   const { aToken } = useContext(AdminContext)
   const { dToken } = useContext(DoctorContext)
 
   return (
-    <div className='min-h-screen bg-white border-r'>
-      {
-        aToken && <ul className='text-[#515151] mt-5'>
-
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/admin-dashboard'}>
-            <img src={assets.home_icon} alt="" />
-            <p className='hidden md:block'>Dashboard</p>
-          </NavLink>
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/all-appointments'}>
-            <img src={assets.appointment_icon} alt="" />
-            <p className='hidden md:block'>Appointments</p>
-          </NavLink>
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/add-doctor'}>
-            <img src={assets.add_icon} alt="" />
-            <p className='hidden md:block'>Add Doctor</p>
-          </NavLink>
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/doctor-list'}>
-            <img src={assets.people_icon} alt="" />
-            <p className='hidden md:block'>Doctors List</p>
+    <aside className='min-h-[calc(100vh-65px)] bg-white/70 backdrop-blur-md border-r border-emerald-100/80 p-3 md:p-5 flex-shrink-0'>
+      {aToken && (
+        <ul className='flex flex-col gap-2 font-bold text-slate-600 text-xs sm:text-sm'>
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/admin-dashboard'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.home_icon} alt="" />
+            <span className='hidden md:block'>Dashboard</span>
           </NavLink>
 
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/all-appointments'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.appointment_icon} alt="" />
+            <span className='hidden md:block'>Appointments</span>
+          </NavLink>
+
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/add-doctor'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.add_icon} alt="" />
+            <span className='hidden md:block'>Add Doctor</span>
+          </NavLink>
+
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/doctor-list'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.people_icon} alt="" />
+            <span className='hidden md:block'>Doctors List</span>
+          </NavLink>
         </ul>
-      }
+      )}
 
-      {
-        dToken && <ul className='text-[#515151] mt-5'>
-
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/doctor-dashboard'}>
-            <img src={assets.home_icon} alt="" />
-            <p className='hidden md:block'>Dashboard</p>
-          </NavLink>
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/doctor-appointments'}>
-            <img src={assets.appointment_icon} alt="" />
-            <p className='hidden md:block'>Appointments</p>
-          </NavLink>
-
-          <NavLink className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`} to={'/doctor-profile'}>
-            <img src={assets.people_icon} alt="" />
-            <p className='hidden md:block'>Profile</p>
+      {dToken && (
+        <ul className='flex flex-col gap-2 font-bold text-slate-600 text-xs sm:text-sm'>
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/doctor-dashboard'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.home_icon} alt="" />
+            <span className='hidden md:block'>Dashboard</span>
           </NavLink>
 
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/doctor-appointments'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.appointment_icon} alt="" />
+            <span className='hidden md:block'>Appointments</span>
+          </NavLink>
+
+          <NavLink 
+            className={({ isActive }) => `flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 ${
+              isActive 
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/30' 
+                : 'hover:bg-emerald-50 hover:text-teal-700'
+            }`} 
+            to={'/doctor-profile'}
+          >
+            <img className='w-5 h-5 opacity-90' src={assets.people_icon} alt="" />
+            <span className='hidden md:block'>Doctor Profile</span>
+          </NavLink>
         </ul>
-      }
-
-    </div>
+      )}
+    </aside>
   )
 }
 

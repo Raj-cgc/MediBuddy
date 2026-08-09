@@ -11,7 +11,11 @@ const AppContextProvider = (props) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL
     const [doctors, setDoctors] = useState([])
 
-    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false)
+    const [token, setToken] = useState(
+        localStorage.getItem('token') && localStorage.getItem('token') !== 'false' && localStorage.getItem('token') !== 'undefined' && localStorage.getItem('token') !== 'null'
+            ? localStorage.getItem('token')
+            : false
+    )
 
     const [userData, setUserData] = useState(false)
 
@@ -38,10 +42,14 @@ const AppContextProvider = (props) => {
                 setUserData(data.userData)
             } else {
                 toast.error(data.message)
+                setToken(false)
+                localStorage.removeItem('token')
             }
         } catch (error) {
             console.log(error)
             toast.error(error.message)
+            setToken(false)
+            localStorage.removeItem('token')
         }
     }
 
