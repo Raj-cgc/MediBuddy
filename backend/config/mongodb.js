@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const directAtlasUri = 'mongodb://rajkumarbxr78_db_user:2hQIme7F7veEgwvh@ac-t6bpdxc-shard-00-00.5malcff.mongodb.net:27017,ac-t6bpdxc-shard-00-01.5malcff.mongodb.net:27017,ac-t6bpdxc-shard-00-02.5malcff.mongodb.net:27017/medibuddy?ssl=true&authSource=admin&retryWrites=true&w=majority';
+const atlasUri = 'mongodb+srv://rajkumarbxr78_db_user:2hQIme7F7veEgwvh@cluster0.5malcff.mongodb.net/medibuddy?retryWrites=true&w=majority';
 
 let connPromise = null;
 
@@ -12,12 +12,12 @@ const connectDB = async () => {
     }
 
     if (!connPromise) {
-        let uri = process.env.MONGODB_URI;
-        if (uri) {
-            uri = uri.trim().replace(/^['"]|['"]$/g, '');
-        }
-        if (!uri || !uri.startsWith('mongodb')) {
-            uri = directAtlasUri;
+        let uri = atlasUri;
+        if (process.env.MONGODB_URI) {
+            let envUri = process.env.MONGODB_URI.trim().replace(/^['"]|['"]$/g, '');
+            if (envUri.includes('5malcff')) {
+                uri = envUri;
+            }
         }
 
         connPromise = mongoose.connect(uri, {
