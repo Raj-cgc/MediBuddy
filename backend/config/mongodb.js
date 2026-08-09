@@ -10,9 +10,11 @@ try {
     }
 } catch (e) {}
 
+// Disable Mongoose command buffering globally so queries never hang for 10s
+mongoose.set('strictQuery', false);
+mongoose.set('bufferCommands', false);
+
 const connectDB = async () => {
-    mongoose.set('strictQuery', false);
-    
     if (isConnected || mongoose.connection.readyState >= 1) {
         isConnected = true;
         return;
@@ -30,7 +32,8 @@ const connectDB = async () => {
     try {
         const db = await mongoose.connect(uri, {
             dbName: 'medibuddy',
-            serverSelectionTimeoutMS: 4000
+            serverSelectionTimeoutMS: 5000,
+            bufferCommands: false
         });
 
         isConnected = db.connections[0].readyState >= 1;
@@ -40,7 +43,8 @@ const connectDB = async () => {
         try {
             const db = await mongoose.connect(directAtlasUri, {
                 dbName: 'medibuddy',
-                serverSelectionTimeoutMS: 4000
+                serverSelectionTimeoutMS: 5000,
+                bufferCommands: false
             });
             isConnected = db.connections[0].readyState >= 1;
             console.log("Database Connected via Direct ReplicaSet URI");
