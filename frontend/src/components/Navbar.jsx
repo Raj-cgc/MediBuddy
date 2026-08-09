@@ -91,7 +91,7 @@ const Navbar = () => {
                     ) : (
                         <button 
                             onClick={() => navigate('/login')} 
-                            className='bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-700 hover:to-emerald-600 text-white text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-full shadow-md shadow-teal-600/25 hover:shadow-lg hover:shadow-teal-600/35 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer hidden sm:block'
+                            className='bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-700 hover:to-emerald-600 text-white text-xs sm:text-sm font-semibold px-4 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md shadow-teal-600/25 hover:shadow-lg transition-all duration-300 cursor-pointer'
                         >
                             Get Started
                         </button>
