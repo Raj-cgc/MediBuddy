@@ -6,11 +6,14 @@ import jwt from 'jsonwebtoken';
 import appointmentModel from "../models/appointmentModel.js";
 import userModel from "../models/userModel.js";
 import connectDB from "../config/mongodb.js";
+import connectCloudinary from "../config/cloudinary.js";
 
 //API for adding doctor
 const addDoctor = async (req, res) => {
     try {
         await connectDB();
+        await connectCloudinary();
+
         const { name, email, password, speciality, degree, experience, about, fees, address } = req.body;
         const imageFile = req.file;
 
@@ -28,16 +31,8 @@ const addDoctor = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-            folder: 'doctors',
-            responsive_breakpoints: {
-                create_derived: true,
-                bytes_step: 20000,
-                min_width: 200,
-                max_width: 1000,
-                max_images: 5,
-            },
-        });
+        // Fast upload to Cloudinary without heavy breakpoint generation
+        const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: 'image' });
         const imageUrl = imageUpload.secure_url;
 
         const doctorData = {
