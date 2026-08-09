@@ -11,8 +11,10 @@ const connectDB = async () => {
     }
 
     try {
-        const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medibuddy';
-        
+        let uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medibuddy';
+        // Strip any surrounding quotes that might be present in environment variables
+        uri = uri.trim().replace(/^['"]|['"]$/g, '');
+
         const db = await mongoose.connect(uri, {
             dbName: 'medibuddy'
         });
