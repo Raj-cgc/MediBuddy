@@ -2,9 +2,20 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
     mongoose.connection.on('connected', () => console.log("Database Connected Successfully"));
-    
-    const uri = process.env.MONGODB_URI ? `${process.env.MONGODB_URI}/medibuddy` : 'mongodb://127.0.0.1:27017/medibuddy';
-    
+
+    let rawUri = process.env.MONGODB_URI;
+    let uri = 'mongodb://127.0.0.1:27017/medibuddy';
+
+    if (rawUri) {
+        if (rawUri.includes('/medibuddy')) {
+            uri = rawUri;
+        } else if (rawUri.includes('?')) {
+            uri = rawUri.replace('?', 'medibuddy?');
+        } else {
+            uri = rawUri.endsWith('/') ? `${rawUri}medibuddy` : `${rawUri}/medibuddy`;
+        }
+    }
+
     try {
         await mongoose.connect(uri);
     } catch (error) {
