@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
 
 let isConnected = false;
+
+// Force IPv4 first for reliable DNS lookups on serverless containers
+try {
+    if (dns.setDefaultResultOrder) {
+        dns.setDefaultResultOrder('ipv4first');
+    }
+} catch (e) {}
 
 const connectDB = async () => {
     mongoose.set('strictQuery', false);
@@ -10,36 +18,34 @@ const connectDB = async () => {
         return;
     }
 
-    const fallbackAtlasUri = 'mongodb+srv://rajkumarbxr78_db_user:2hQIme7F7veEgwvh@cluster0.5malcff.mongodb.net/?appName=Cluster0';
-    let envUri = process.env.MONGODB_URI || process.env['MONGODB_URI '] || process.env.MONGO_URI || fallbackAtlasUri;
-
-    // Clean up URI string completely (remove quotes and spaces)
+    const directAtlasUri = 'mongodb://rajkumarbxr78_db_user:2hQIme7F7veEgwvh@ac-t6bpdxc-shard-00-00.5malcff.mongodb.net:27017,ac-t6bpdxc-shard-00-01.5malcff.mongodb.net:27017,ac-t6bpdxc-shard-00-02.5malcff.mongodb.net:27017/medibuddy?ssl=true&authSource=admin&retryWrites=true&w=majority';
+    
+    let envUri = process.env.MONGODB_URI || process.env['MONGODB_URI '] || process.env.MONGO_URI || directAtlasUri;
     let uri = String(envUri).trim().replace(/^['"]|['"]$/g, '');
 
-    // If for any reason uri doesn't start with mongodb, use fallback Atlas URI
     if (!uri.startsWith('mongodb')) {
-        uri = fallbackAtlasUri;
+        uri = directAtlasUri;
     }
 
     try {
         const db = await mongoose.connect(uri, {
             dbName: 'medibuddy',
-            serverSelectionTimeoutMS: 10000
+            serverSelectionTimeoutMS: 4000
         });
 
         isConnected = db.connections[0].readyState >= 1;
         console.log("Database Connected Successfully to Atlas");
     } catch (error) {
-        console.error("Failed to connect to MongoDB Atlas with primary URI:", error.message);
+        console.error("Primary URI connection failed, switching to direct ReplicaSet URI:", error.message);
         try {
-            const db = await mongoose.connect(fallbackAtlasUri, {
+            const db = await mongoose.connect(directAtlasUri, {
                 dbName: 'medibuddy',
-                serverSelectionTimeoutMS: 10000
+                serverSelectionTimeoutMS: 4000
             });
             isConnected = db.connections[0].readyState >= 1;
-            console.log("Database Connected via fallback Atlas URI");
+            console.log("Database Connected via Direct ReplicaSet URI");
         } catch (fallbackErr) {
-            console.error("Fallback connection failed:", fallbackErr.message);
+            console.error("Direct Atlas connection failed:", fallbackErr.message);
         }
     }
 }
