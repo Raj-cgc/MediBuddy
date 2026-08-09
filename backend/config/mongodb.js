@@ -12,20 +12,16 @@ const connectDB = async () => {
     }
 
     if (!connPromise) {
-        const uri = (process.env.MONGODB_URI && process.env.MONGODB_URI.startsWith('mongodb'))
-            ? process.env.MONGODB_URI.trim().replace(/^['"]|['"]$/g, '')
-            : directAtlasUri;
+        let uri = process.env.MONGODB_URI;
+        if (uri) {
+            uri = uri.trim().replace(/^['"]|['"]$/g, '');
+        }
+        if (!uri || !uri.startsWith('mongodb')) {
+            uri = directAtlasUri;
+        }
 
         connPromise = mongoose.connect(uri, {
-            dbName: 'medibuddy',
-            serverSelectionTimeoutMS: 10000
-        }).catch(async (err) => {
-            console.error("Primary URI connection failed, falling back to direct Atlas connection:", err.message);
-            connPromise = null;
-            return await mongoose.connect(directAtlasUri, {
-                dbName: 'medibuddy',
-                serverSelectionTimeoutMS: 10000
-            });
+            dbName: 'medibuddy'
         });
     }
 
