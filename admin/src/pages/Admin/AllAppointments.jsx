@@ -44,42 +44,52 @@ const AllAppointments = () => {
           {appointments.map((item, index) => {
             const ageVal = calculateAge(item.userData?.dob);
             return (
-              <div className='flex flex-wrap justify-between sm:grid sm:grid-cols-[0.5fr_2.5fr_1fr_3.5fr_2.5fr_1.5fr_1.5fr] items-center p-4 sm:p-6 hover:bg-emerald-50/30 transition-colors gap-3' key={index}>
-                <p className='max-sm:hidden text-slate-400 font-extrabold text-base'>{index + 1}</p>
+              <div className='flex flex-col sm:grid sm:grid-cols-[0.5fr_2.5fr_1fr_3.5fr_2.5fr_1.5fr_1.5fr] items-start sm:items-center p-4 sm:p-6 hover:bg-emerald-50/30 transition-colors gap-3 sm:gap-3' key={index}>
+                <p className='hidden sm:block text-slate-400 font-extrabold text-base'>{index + 1}</p>
                 
-                <div className='flex items-center gap-3.5'>
-                  <img className='w-11 h-11 rounded-full object-cover border-2 border-emerald-100 bg-emerald-50' src={item.userData?.image} alt="" />
-                  <p className='font-extrabold text-slate-900 text-base sm:text-lg'>{item.userData?.name || 'Patient'}</p>
+                {/* Patient Header on Mobile / Row item on desktop */}
+                <div className='flex items-center justify-between w-full sm:w-auto'>
+                  <div className='flex items-center gap-3 sm:gap-3.5'>
+                    <img className='w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-emerald-100 bg-emerald-50 flex-shrink-0' src={item.userData?.image} alt="" />
+                    <div className='flex flex-col sm:block'>
+                      <p className='font-extrabold text-slate-900 text-base sm:text-lg'>{item.userData?.name || 'Patient'}</p>
+                      <span className='sm:hidden text-xs text-slate-500 font-semibold'>{ageVal === 'N/A' ? '' : `${ageVal} yrs`}</span>
+                    </div>
+                  </div>
+                  <span className='sm:hidden font-extrabold text-teal-800 text-base'>{currencySymbol}{item.amount}</span>
                 </div>
 
-                <p className='max-sm:hidden text-slate-700 font-bold text-sm sm:text-base'>
+                <p className='hidden sm:block text-slate-700 font-bold text-sm sm:text-base'>
                   {ageVal === 'N/A' ? 'N/A' : `${ageVal} yrs`}
                 </p>
                 
-                <p className='text-slate-800 font-bold text-sm sm:text-base'>
-                  {slotDateFormat(item.slotDate)} <span className='text-teal-700 font-extrabold'>| {item.slotTime}</span>
+                <p className='text-slate-800 font-bold text-xs sm:text-base bg-emerald-50/60 sm:bg-transparent px-3 py-1 sm:p-0 rounded-lg w-full sm:w-auto'>
+                  <span>📅 </span>{slotDateFormat(item.slotDate)} <span className='text-teal-700 font-extrabold'>| {item.slotTime}</span>
                 </p>
 
-                <div className='flex items-center gap-3.5'>
-                  <img className='w-11 h-11 rounded-full object-cover border-2 border-emerald-100 bg-teal-50' src={item.docData?.image} alt="" />
-                  <p className='font-extrabold text-slate-900 text-base sm:text-lg'>{item.docData?.name}</p>
+                <div className='flex items-center gap-3 sm:gap-3.5 w-full sm:w-auto'>
+                  <img className='w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-emerald-100 bg-teal-50 flex-shrink-0' src={item.docData?.image} alt="" />
+                  <div className='flex flex-col'>
+                    <span className='text-[10px] uppercase text-slate-400 font-bold sm:hidden'>Assigned Doctor</span>
+                    <p className='font-extrabold text-slate-900 text-sm sm:text-lg'>{item.docData?.name}</p>
+                  </div>
                 </div>
 
-                <p className='font-extrabold text-teal-800 text-base sm:text-lg'>{currencySymbol}{item.amount}</p>
+                <p className='hidden sm:block font-extrabold text-teal-800 text-base sm:text-lg'>{currencySymbol}{item.amount}</p>
 
-                <div>
+                <div className='w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex justify-end'>
                   {item.cancelled ? (
-                    <span className='px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-xs sm:text-sm font-extrabold border border-red-200 inline-block'>
+                    <span className='w-full sm:w-auto text-center px-4 py-2 sm:py-1.5 rounded-xl sm:rounded-full bg-red-50 text-red-600 text-xs sm:text-sm font-extrabold border border-red-200 inline-block'>
                       Cancelled
                     </span>
                   ) : item.isCompleted ? (
-                    <span className='px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs sm:text-sm font-extrabold border border-emerald-200 inline-block'>
+                    <span className='w-full sm:w-auto text-center px-4 py-2 sm:py-1.5 rounded-xl sm:rounded-full bg-emerald-50 text-emerald-700 text-xs sm:text-sm font-extrabold border border-emerald-200 inline-block'>
                       Completed
                     </span>
                   ) : (
                     <button 
                       onClick={() => cancelAppointment(item._id)} 
-                      className='px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 font-bold text-xs sm:text-sm border border-slate-200 transition-colors'
+                      className='w-full sm:w-auto px-4 py-2 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 font-bold text-xs sm:text-sm border border-slate-200 transition-colors text-center'
                     >
                       Cancel ✕
                     </button>

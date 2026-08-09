@@ -72,30 +72,30 @@ const Header = () => {
                 </div>
 
                 {/* Right Image Column with Floating Glass Cards */}
-                <div className='w-full lg:w-1/2 relative flex justify-center items-center mt-6 lg:mt-0 min-h-[420px] sm:min-h-[500px]'>
+                <div className='w-full lg:w-1/2 relative flex justify-center items-center mt-6 lg:mt-0 min-h-[360px] sm:min-h-[500px] overflow-hidden sm:overflow-visible'>
                     
                     {/* Main Image Container */}
-                    <div className='relative z-10 w-full max-w-md rounded-3xl overflow-hidden bg-gradient-to-b from-teal-500/10 to-emerald-500/20 p-2 shadow-2xl shadow-emerald-900/10 border border-white/80'>
+                    <div className='relative z-10 w-full max-w-xs sm:max-w-md rounded-3xl overflow-hidden bg-gradient-to-b from-teal-500/10 to-emerald-500/20 p-2 shadow-2xl shadow-emerald-900/10 border border-white/80'>
                         <img 
-                            className='w-full h-auto max-h-[460px] object-cover object-top rounded-2xl' 
+                            className='w-full h-auto max-h-[380px] sm:max-h-[460px] object-cover object-top rounded-2xl' 
                             src={assets.header_img} 
                             alt="Professional Doctor" 
                         />
                     </div>
 
                     {/* Floating Badge 1: Specialists */}
-                    <div className='absolute top-6 left-0 sm:left-4 z-20 glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-3 animate-float-slow shadow-lg'>
-                        <div className='w-9 h-9 rounded-xl bg-teal-600/10 text-teal-700 flex items-center justify-center text-lg font-bold'>
+                    <div className='absolute top-4 left-2 sm:left-4 z-20 glass-pill px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl flex items-center gap-2 sm:gap-3 animate-float-slow shadow-lg'>
+                        <div className='w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-teal-600/10 text-teal-700 flex items-center justify-center text-sm sm:text-lg font-bold'>
                             🩺
                         </div>
                         <div className='flex flex-col text-left'>
-                            <span className='text-[10px] uppercase tracking-wider text-slate-400 font-bold'>Specialists</span>
-                            <span className='text-sm font-extrabold text-slate-800'>+120 <span className='text-xs font-semibold text-slate-500'>Drs</span></span>
+                            <span className='text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 font-bold'>Specialists</span>
+                            <span className='text-xs sm:text-sm font-extrabold text-slate-800'>+120 <span className='text-[10px] sm:text-xs font-semibold text-slate-500'>Drs</span></span>
                         </div>
                     </div>
 
-                    {/* Floating Badge 2: Counseling */}
-                    <div className='absolute bottom-28 left-2 sm:left-8 z-20 glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-3 animate-float-medium shadow-lg'>
+                    {/* Floating Badge 2: Counseling (Hidden on mobile for clean layout) */}
+                    <div className='hidden sm:flex absolute bottom-28 left-8 z-20 glass-pill px-4 py-2.5 rounded-2xl items-center gap-3 animate-float-medium shadow-lg'>
                         <div className='w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-lg font-bold'>
                             💊
                         </div>
@@ -105,8 +105,8 @@ const Header = () => {
                         </div>
                     </div>
 
-                    {/* Floating Badge 3: Lab Tests */}
-                    <div className='absolute top-20 right-0 sm:right-2 z-20 glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-3 animate-float-slow shadow-lg'>
+                    {/* Floating Badge 3: Lab Tests (Hidden on small mobile) */}
+                    <div className='hidden sm:flex absolute top-20 right-2 z-20 glass-pill px-4 py-2.5 rounded-2xl items-center gap-3 animate-float-slow shadow-lg'>
                         <div className='w-9 h-9 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center text-lg font-bold'>
                             🔮
                         </div>
@@ -117,17 +117,17 @@ const Header = () => {
                     </div>
 
                     {/* Floating Badge 4: Rating & Reviews Card */}
-                    <div className='absolute -bottom-4 right-2 sm:right-6 z-30 glass-card p-3.5 rounded-2xl flex items-center gap-3.5 shadow-xl border border-white/90 animate-float-medium'>
-                        <img className='w-11 h-11 rounded-xl object-cover border-2 border-teal-500/40 shadow-xs' src={assets.doc1 || assets.profile_pic} alt="Doctor" />
+                    <div className='absolute bottom-2 right-2 sm:right-6 sm:-bottom-4 z-30 glass-card p-2.5 sm:p-3.5 rounded-2xl flex items-center gap-2.5 sm:gap-3.5 shadow-xl border border-white/90 animate-float-medium'>
+                        <img className='w-9 h-9 sm:w-11 sm:h-11 rounded-xl object-cover border-2 border-teal-500/40 shadow-xs' src={assets.doc1 || assets.profile_pic} alt="Doctor" />
                         <div className='flex flex-col text-left'>
-                            <div className='flex items-center gap-1 text-amber-500 text-xs font-extrabold'>
+                            <div className='flex items-center gap-1 text-amber-500 text-[11px] sm:text-xs font-extrabold'>
                                 <span>★ 4.9</span>
                             </div>
-                            <span className='text-xs font-bold text-slate-800'>2,568 reviews</span>
+                            <span className='text-[11px] sm:text-xs font-bold text-slate-800'>2,568 reviews</span>
                         </div>
                         <button 
                             onClick={() => navigate('/doctors')} 
-                            className='w-8 h-8 rounded-full bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 flex items-center justify-center transition-colors cursor-pointer ml-1 text-sm font-bold'
+                            className='w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 flex items-center justify-center transition-colors cursor-pointer ml-1 text-xs sm:text-sm font-bold'
                         >
                             ↗
                         </button>

@@ -25,7 +25,7 @@ const App = () => {
     <div className='bg-color-[#F8F9FD]'>
       <ToastContainer />
       <NavBar />
-      <div className='flex items-start'>
+      <div className='flex flex-col md:flex-row items-start min-h-[calc(100vh-65px)]'>
         <Sidebar />
         <Routes>
           {/* Admin routes */}

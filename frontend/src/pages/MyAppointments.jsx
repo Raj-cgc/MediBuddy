@@ -111,33 +111,33 @@ const MyAppointments = () => {
         {appointments.length > 0 ? (
           appointments.map((item, index) => (
             <div 
-              className='bg-white rounded-3xl p-5 border border-emerald-100/80 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center justify-between gap-6' 
+              className='bg-white rounded-3xl p-4 sm:p-5 border border-emerald-100/80 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6' 
               key={index}
             >
-              <div className='flex items-center gap-5 w-full sm:w-auto'>
-                <img className='w-24 h-24 rounded-2xl object-cover border border-emerald-100 bg-emerald-50/50' src={item.docData.image} alt={item.docData.name} />
+              <div className='flex items-start sm:items-center gap-4 sm:gap-5 w-full sm:w-auto'>
+                <img className='w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-emerald-100 bg-emerald-50/50 flex-shrink-0' src={item.docData.image} alt={item.docData.name} />
                 
-                <div className='flex flex-col gap-1 text-xs sm:text-sm'>
-                  <h3 className='text-base font-extrabold text-slate-900'>{item.docData.name}</h3>
+                <div className='flex flex-col gap-1 text-xs sm:text-sm overflow-hidden'>
+                  <h3 className='text-base font-extrabold text-slate-900 truncate'>{item.docData.name}</h3>
                   <span className='self-start px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-bold border border-teal-100'>
                     {item.docData.speciality}
                   </span>
                   
-                  <div className='flex items-center gap-1.5 text-slate-500 font-medium mt-1 text-xs'>
+                  <div className='flex flex-wrap items-center gap-1.5 text-slate-500 font-medium mt-1 text-xs'>
                     <span>📅</span>
                     <span className='font-bold text-slate-700'>{slotDateFormat(item.slotDate)}</span>
-                    <span>|</span>
+                    <span className='hidden sm:inline'>|</span>
                     <span className='font-bold text-teal-700'>{item.slotTime}</span>
                   </div>
 
-                  <p className='text-[11px] text-slate-400 font-normal line-clamp-1'>
+                  <p className='text-[11px] text-slate-400 font-normal line-clamp-1 mt-0.5'>
                     {item.docData.address.line1}, {item.docData.address.line2}
                   </p>
                 </div>
               </div>
 
               {/* Status & Action Buttons */}
-              <div className='flex flex-wrap sm:flex-col gap-2 w-full sm:w-48 justify-end'>
+              <div className='flex flex-col sm:flex-col gap-2 w-full sm:w-48 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end'>
                 {!item.cancelled && item.payment && !item.isCompleted && (
                   <span className='w-full py-2.5 px-4 text-center rounded-xl bg-teal-50 text-teal-700 font-extrabold text-xs border border-teal-200'>
                     ✓ Paid

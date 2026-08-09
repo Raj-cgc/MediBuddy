@@ -86,7 +86,7 @@ const Navbar = () => {
 
                     {/* Mobile Slide-out Menu */}
                     <div className={`${showMenu ? 'fixed inset-0 w-full h-full z-50 opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} md:hidden bg-slate-900/40 backdrop-blur-sm transition-all duration-300`}>
-                        <div className={`fixed right-0 top-0 bottom-0 w-4/5 max-w-sm bg-white p-6 shadow-2xl transition-transform duration-300 flex flex-col justify-between ${showMenu ? 'translate-x-0' : 'translate-x-full'}`}>
+                        <div className={`fixed right-0 top-0 bottom-0 w-4/5 max-w-sm bg-white p-6 shadow-2xl transition-transform duration-300 flex flex-col justify-between overflow-y-auto ${showMenu ? 'translate-x-0' : 'translate-x-full'}`}>
                             <div>
                                 <div className='flex items-center justify-between pb-5 border-b border-slate-100'>
                                     <div className='flex items-center gap-2'>
@@ -99,21 +99,54 @@ const Navbar = () => {
                                         <img className='w-5' src={assets.cross_icon} alt="Close" />
                                     </button>
                                 </div>
-                                <ul className='flex flex-col gap-2 mt-6 font-semibold text-slate-700'>
+
+                                {token && userData && (
+                                    <div className='mt-4 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 flex items-center gap-3'>
+                                        <img className='w-10 h-10 rounded-full object-cover border border-teal-500/40' src={userData.image || assets.profile_pic} alt="User Avatar" />
+                                        <div className='flex flex-col text-left overflow-hidden'>
+                                            <span className='text-sm font-extrabold text-slate-800 truncate'>{userData.name}</span>
+                                            <span className='text-xs text-slate-500 truncate'>{userData.email}</span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <ul className='flex flex-col gap-1.5 mt-5 font-semibold text-slate-700'>
                                     <NavLink onClick={() => setShowMenu(false)} to='/' className={({ isActive }) => `px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'hover:bg-slate-50'}`}>Home</NavLink>
                                     <NavLink onClick={() => setShowMenu(false)} to='/doctors' className={({ isActive }) => `px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'hover:bg-slate-50'}`}>All Doctors</NavLink>
                                     <NavLink onClick={() => setShowMenu(false)} to='/about' className={({ isActive }) => `px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'hover:bg-slate-50'}`}>About</NavLink>
                                     <NavLink onClick={() => setShowMenu(false)} to='/contact' className={({ isActive }) => `px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'hover:bg-slate-50'}`}>Contact</NavLink>
+                                    
+                                    {token && userData && (
+                                        <>
+                                            <div className='h-px bg-slate-100 my-2'></div>
+                                            <NavLink onClick={() => setShowMenu(false)} to='/my-profile' className={({ isActive }) => `px-4 py-3 rounded-xl transition-all flex items-center gap-2.5 ${isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'hover:bg-slate-50'}`}>
+                                                <span>👤</span> My Profile
+                                            </NavLink>
+                                            <NavLink onClick={() => setShowMenu(false)} to='/my-appointments' className={({ isActive }) => `px-4 py-3 rounded-xl transition-all flex items-center gap-2.5 ${isActive ? 'bg-teal-50 text-teal-700 font-bold' : 'hover:bg-slate-50'}`}>
+                                                <span>📅</span> My Appointments
+                                            </NavLink>
+                                        </>
+                                    )}
                                 </ul>
                             </div>
-                            {!token && (
-                                <button 
-                                    onClick={() => { setShowMenu(false); navigate('/login'); }} 
-                                    className='w-full bg-teal-600 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-teal-600/30 text-center'
-                                >
-                                    Get Started
-                                </button>
-                            )}
+
+                            <div className='mt-6 pt-4 border-t border-slate-100'>
+                                {token ? (
+                                    <button 
+                                        onClick={() => { setShowMenu(false); logout(); }} 
+                                        className='w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3.5 rounded-xl border border-red-200 transition-colors text-center flex items-center justify-center gap-2'
+                                    >
+                                        <span>🚪</span> Logout
+                                    </button>
+                                ) : (
+                                    <button 
+                                        onClick={() => { setShowMenu(false); navigate('/login'); }} 
+                                        className='w-full bg-teal-600 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-teal-600/30 text-center'
+                                    >
+                                        Get Started
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
