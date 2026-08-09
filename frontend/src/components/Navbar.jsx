@@ -51,43 +51,58 @@ const Navbar = () => {
                 {/* Right Action / Profile */}
                 <div className='flex items-center gap-3'>
                     {token && userData ? (
-                        <div 
-                            onClick={() => setShowProfileMenu(prev => !prev)}
-                            className='flex items-center gap-2 cursor-pointer group relative bg-emerald-50/90 hover:bg-emerald-100/80 py-1.5 px-2.5 sm:px-3 rounded-full border border-emerald-200/80 transition-all select-none'
-                        >
-                            <img className='w-8 h-8 rounded-full object-cover border-2 border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
-                            <span className='text-xs font-bold text-slate-700 max-w-[100px] truncate hidden sm:inline-block'>{userData.name}</span>
-                            <img className={`w-2.5 opacity-70 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : 'group-hover:rotate-180'}`} src={assets.dropdown_icon} alt="" />
-                            
-                            {/* Profile Dropdown Menu - Explicitly toggling on click for touch screen phones */}
-                            <div className={`absolute top-full right-0 pt-2 text-sm font-medium text-slate-700 z-50 w-56 animate-fadeIn ${showProfileMenu ? 'block' : 'hidden group-hover:block'}`}>
-                                <div className='bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-2xl border border-emerald-100 flex flex-col gap-1'>
-                                    <div className='px-3 py-2 border-b border-slate-100 mb-1 sm:hidden'>
-                                        <p className='text-xs font-extrabold text-slate-900 truncate'>{userData.name}</p>
-                                        <p className='text-[10px] text-slate-500 truncate'>{userData.email}</p>
+                        <>
+                            {showProfileMenu && (
+                                <div 
+                                    onClick={() => setShowProfileMenu(false)} 
+                                    className='fixed inset-0 z-40 bg-slate-900/10 backdrop-blur-xs sm:hidden'
+                                />
+                            )}
+                            <div 
+                                onClick={() => setShowProfileMenu(prev => !prev)}
+                                className='flex items-center gap-2 cursor-pointer group relative bg-emerald-50/90 hover:bg-emerald-100/80 py-1.5 px-2.5 sm:px-3 rounded-full border border-emerald-200/80 transition-all select-none z-50'
+                            >
+                                <img className='w-8 h-8 rounded-full object-cover border-2 border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
+                                <span className='text-xs font-bold text-slate-700 max-w-[100px] truncate hidden sm:inline-block'>{userData.name}</span>
+                                <img className={`w-2.5 opacity-70 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : 'group-hover:rotate-180'}`} src={assets.dropdown_icon} alt="" />
+                                
+                                {/* Profile Dropdown Menu - Fixed spacious overlay on mobile, dropdown on desktop */}
+                                <div className={`fixed top-16 right-4 left-4 sm:absolute sm:top-full sm:right-0 sm:left-auto sm:w-64 pt-1 sm:pt-2 text-sm font-medium text-slate-700 z-50 animate-fadeIn ${showProfileMenu ? 'block' : 'hidden group-hover:block'}`}>
+                                    <div className='bg-white/95 backdrop-blur-md rounded-3xl sm:rounded-2xl p-3 shadow-2xl border border-emerald-100 flex flex-col gap-1.5'>
+                                        <div className='flex items-center gap-3 p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-100/80 mb-1'>
+                                            <img className='w-10 h-10 rounded-full object-cover border border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
+                                            <div className='flex flex-col text-left overflow-hidden'>
+                                                <span className='text-sm font-extrabold text-slate-900 truncate'>{userData.name}</span>
+                                                <span className='text-xs text-slate-500 truncate'>{userData.email}</span>
+                                            </div>
+                                        </div>
+
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-profile'); }} 
+                                            className='flex items-center gap-3 px-3.5 py-3 rounded-2xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-bold text-sm'
+                                        >
+                                            <span className='text-base'>👤</span> My Profile
+                                        </button>
+
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-appointments'); }} 
+                                            className='flex items-center gap-3 px-3.5 py-3 rounded-2xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-bold text-sm'
+                                        >
+                                            <span className='text-base'>📅</span> My Appointments
+                                        </button>
+
+                                        <div className='h-px bg-slate-100 my-0.5'></div>
+
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); logout(); }} 
+                                            className='flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-600 text-left transition-colors font-extrabold text-sm border border-red-100/80'
+                                        >
+                                            <span className='text-base'>🚪</span> Logout
+                                        </button>
                                     </div>
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-profile'); }} 
-                                        className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
-                                    >
-                                        <span>👤</span> My Profile
-                                    </button>
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-appointments'); }} 
-                                        className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
-                                    >
-                                        <span>📅</span> My Appointments
-                                    </button>
-                                    <div className='h-px bg-slate-100 my-1'></div>
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); logout(); }} 
-                                        className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 text-left transition-colors font-bold text-xs sm:text-sm'
-                                    >
-                                        <span>🚪</span> Logout
-                                    </button>
                                 </div>
                             </div>
-                        </div>
+                        </>
                     ) : (
                         <button 
                             onClick={() => navigate('/login')} 
