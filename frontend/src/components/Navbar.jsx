@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { createPortal } from 'react-dom';
 import { assets } from '../assets/assets';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
@@ -52,12 +53,7 @@ const Navbar = () => {
                 <div className='flex items-center gap-3'>
                     {token && userData ? (
                         <>
-                            {showProfileMenu && (
-                                <div 
-                                    onClick={() => setShowProfileMenu(false)} 
-                                    className='fixed inset-0 z-40 bg-slate-900/10 backdrop-blur-xs sm:hidden'
-                                />
-                            )}
+                            {/* Profile Trigger Button */}
                             <div 
                                 onClick={() => setShowProfileMenu(prev => !prev)}
                                 className='flex items-center gap-2 cursor-pointer group relative bg-emerald-50/90 hover:bg-emerald-100/80 py-1.5 px-2.5 sm:px-3 rounded-full border border-emerald-200/80 transition-all select-none z-50'
@@ -66,42 +62,76 @@ const Navbar = () => {
                                 <span className='text-xs font-bold text-slate-700 max-w-[100px] truncate hidden sm:inline-block'>{userData.name}</span>
                                 <img className={`w-2.5 opacity-70 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : 'group-hover:rotate-180'}`} src={assets.dropdown_icon} alt="" />
                                 
-                                {/* Profile Dropdown Menu - Fixed spacious overlay on mobile, dropdown on desktop */}
-                                <div className={`fixed top-16 right-4 left-4 sm:absolute sm:top-full sm:right-0 sm:left-auto sm:w-64 pt-1 sm:pt-2 text-sm font-medium text-slate-700 z-50 animate-fadeIn ${showProfileMenu ? 'block' : 'hidden group-hover:block'}`}>
-                                    <div className='bg-white/95 backdrop-blur-md rounded-3xl sm:rounded-2xl p-3 shadow-2xl border border-emerald-100 flex flex-col gap-1.5'>
-                                        <div className='flex items-center gap-3 p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-100/80 mb-1'>
-                                            <img className='w-10 h-10 rounded-full object-cover border border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
-                                            <div className='flex flex-col text-left overflow-hidden'>
-                                                <span className='text-sm font-extrabold text-slate-900 truncate'>{userData.name}</span>
-                                                <span className='text-xs text-slate-500 truncate'>{userData.email}</span>
-                                            </div>
-                                        </div>
-
+                                {/* Desktop Inline Dropdown */}
+                                <div className={`hidden sm:${showProfileMenu ? 'block' : 'group-hover:block'} absolute top-full right-0 pt-2 text-sm font-medium text-slate-700 z-50 w-60 animate-fadeIn`}>
+                                    <div className='bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-2xl border border-emerald-100 flex flex-col gap-1'>
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-profile'); }} 
-                                            className='flex items-center gap-3 px-3.5 py-3 rounded-2xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-bold text-sm'
+                                            className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
                                         >
-                                            <span className='text-base'>👤</span> My Profile
+                                            <span>👤</span> My Profile
                                         </button>
-
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-appointments'); }} 
-                                            className='flex items-center gap-3 px-3.5 py-3 rounded-2xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-bold text-sm'
+                                            className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
                                         >
-                                            <span className='text-base'>📅</span> My Appointments
+                                            <span>📅</span> My Appointments
                                         </button>
-
-                                        <div className='h-px bg-slate-100 my-0.5'></div>
-
+                                        <div className='h-px bg-slate-100 my-1'></div>
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); logout(); }} 
-                                            className='flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-600 text-left transition-colors font-extrabold text-sm border border-red-100/80'
+                                            className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 text-left transition-colors font-bold text-xs sm:text-sm'
                                         >
-                                            <span className='text-base'>🚪</span> Logout
+                                            <span>🚪</span> Logout
                                         </button>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Mobile Floating Card Modal rendered via React Portal directly to document.body */}
+                            {showProfileMenu && typeof document !== 'undefined' && createPortal(
+                                <>
+                                    <div 
+                                        onClick={() => setShowProfileMenu(false)} 
+                                        className='fixed inset-0 z-[9998] bg-slate-900/30 backdrop-blur-xs sm:hidden transition-opacity'
+                                    />
+                                    <div className='fixed top-18 right-3 left-3 sm:hidden z-[9999] text-sm font-medium text-slate-700 animate-fadeIn'>
+                                        <div className='bg-white/98 backdrop-blur-xl rounded-3xl p-4 shadow-2xl border border-emerald-100 flex flex-col gap-2'>
+                                            <div className='flex items-center gap-3.5 p-3 rounded-2xl bg-emerald-50/80 border border-emerald-100/80 mb-1'>
+                                                <img className='w-12 h-12 rounded-full object-cover border-2 border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
+                                                <div className='flex flex-col text-left overflow-hidden'>
+                                                    <span className='text-base font-extrabold text-slate-900 truncate'>{userData.name}</span>
+                                                    <span className='text-xs text-slate-500 truncate'>{userData.email}</span>
+                                                </div>
+                                            </div>
+
+                                            <button 
+                                                onClick={() => { setShowProfileMenu(false); navigate('/my-profile'); }} 
+                                                className='flex items-center gap-3 px-4 py-3.5 rounded-2xl hover:bg-emerald-50 active:bg-emerald-100 text-slate-800 hover:text-teal-700 text-left transition-colors font-bold text-sm'
+                                            >
+                                                <span className='text-lg'>👤</span> My Profile
+                                            </button>
+
+                                            <button 
+                                                onClick={() => { setShowProfileMenu(false); navigate('/my-appointments'); }} 
+                                                className='flex items-center gap-3 px-4 py-3.5 rounded-2xl hover:bg-emerald-50 active:bg-emerald-100 text-slate-800 hover:text-teal-700 text-left transition-colors font-bold text-sm'
+                                            >
+                                                <span className='text-lg'>📅</span> My Appointments
+                                            </button>
+
+                                            <div className='h-px bg-slate-100 my-1'></div>
+
+                                            <button 
+                                                onClick={() => { setShowProfileMenu(false); logout(); }} 
+                                                className='flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-red-50 hover:bg-red-100 active:bg-red-200 text-red-600 text-left transition-colors font-extrabold text-sm border border-red-100'
+                                            >
+                                                <span className='text-lg'>🚪</span> Logout
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>,
+                                document.body
+                            )}
                         </>
                     ) : (
                         <button 
