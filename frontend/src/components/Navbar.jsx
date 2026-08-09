@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom';
 import { assets } from '../assets/assets';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -9,11 +9,32 @@ const Navbar = () => {
     const { token, setToken, userData } = useContext(AppContext);
     const [showMenu, setShowMenu] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [isProfileHovered, setIsProfileHovered] = useState(false);
+    const profileRef = useRef(null);
 
     const logout = () => {
-        setToken(false)
-        localStorage.removeItem('token')
+        setToken(false);
+        localStorage.removeItem('token');
+        setShowProfileMenu(false);
+        setIsProfileHovered(false);
     }
+
+    const isProfileOpen = showProfileMenu || isProfileHovered;
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowProfileMenu(false);
+                setIsProfileHovered(false);
+            }
+        };
+        if (showProfileMenu || isProfileHovered) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showProfileMenu, isProfileHovered]);
 
     return (
         <header className='sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-emerald-100/60 transition-all shadow-xs'>
@@ -55,37 +76,45 @@ const Navbar = () => {
                         <>
                             {/* Profile Trigger Button */}
                             <div 
+                                ref={profileRef}
+                                onMouseEnter={() => setIsProfileHovered(true)}
+                                onMouseLeave={() => setIsProfileHovered(false)}
                                 onClick={() => setShowProfileMenu(prev => !prev)}
                                 className='flex items-center gap-2 cursor-pointer group relative bg-emerald-50/90 hover:bg-emerald-100/80 py-1.5 px-2.5 sm:px-3 rounded-full border border-emerald-200/80 transition-all select-none z-50'
                             >
                                 <img className='w-8 h-8 rounded-full object-cover border-2 border-teal-500/40 shadow-xs' src={userData.image || assets.profile_pic} alt="User Avatar" />
                                 <span className='text-xs font-bold text-slate-700 max-w-[100px] truncate hidden sm:inline-block'>{userData.name}</span>
-                                <img className={`w-2.5 opacity-70 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : 'group-hover:rotate-180'}`} src={assets.dropdown_icon} alt="" />
+                                <img className={`w-2.5 opacity-70 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} src={assets.dropdown_icon} alt="" />
                                 
                                 {/* Desktop Inline Dropdown */}
-                                <div className={`hidden sm:${showProfileMenu ? 'block' : 'group-hover:block'} absolute top-full right-0 pt-2 text-sm font-medium text-slate-700 z-50 w-60 animate-fadeIn`}>
-                                    <div className='bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-2xl border border-emerald-100 flex flex-col gap-1'>
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-profile'); }} 
-                                            className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
-                                        >
-                                            <span>👤</span> My Profile
-                                        </button>
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); navigate('/my-appointments'); }} 
-                                            className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
-                                        >
-                                            <span>📅</span> My Appointments
-                                        </button>
-                                        <div className='h-px bg-slate-100 my-1'></div>
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); setShowProfileMenu(false); logout(); }} 
-                                            className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 text-left transition-colors font-bold text-xs sm:text-sm'
-                                        >
-                                            <span>🚪</span> Logout
-                                        </button>
+                                {isProfileOpen && (
+                                    <div 
+                                        onClick={(e) => e.stopPropagation()}
+                                        className='hidden sm:block absolute top-full right-0 pt-2 text-sm font-medium text-slate-700 z-50 w-60 animate-fadeIn'
+                                    >
+                                        <div className='bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-2xl border border-emerald-100 flex flex-col gap-1'>
+                                            <button 
+                                                onClick={() => { setShowProfileMenu(false); setIsProfileHovered(false); navigate('/my-profile'); }} 
+                                                className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
+                                            >
+                                                <span>👤</span> My Profile
+                                            </button>
+                                            <button 
+                                                onClick={() => { setShowProfileMenu(false); setIsProfileHovered(false); navigate('/my-appointments'); }} 
+                                                className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-slate-700 hover:text-teal-700 text-left transition-colors font-semibold text-xs sm:text-sm'
+                                            >
+                                                <span>📅</span> My Appointments
+                                            </button>
+                                            <div className='h-px bg-slate-100 my-1'></div>
+                                            <button 
+                                                onClick={() => { logout(); }} 
+                                                className='flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 text-left transition-colors font-bold text-xs sm:text-sm'
+                                            >
+                                                <span>🚪</span> Logout
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
 
                             {/* Mobile Floating Card Modal rendered via React Portal directly to document.body */}
@@ -106,14 +135,14 @@ const Navbar = () => {
                                             </div>
 
                                             <button 
-                                                onClick={() => { setShowProfileMenu(false); navigate('/my-profile'); }} 
+                                                onClick={() => { setShowProfileMenu(false); setIsProfileHovered(false); navigate('/my-profile'); }} 
                                                 className='flex items-center gap-3 px-4 py-3.5 rounded-2xl hover:bg-emerald-50 active:bg-emerald-100 text-slate-800 hover:text-teal-700 text-left transition-colors font-bold text-sm'
                                             >
                                                 <span className='text-lg'>👤</span> My Profile
                                             </button>
 
                                             <button 
-                                                onClick={() => { setShowProfileMenu(false); navigate('/my-appointments'); }} 
+                                                onClick={() => { setShowProfileMenu(false); setIsProfileHovered(false); navigate('/my-appointments'); }} 
                                                 className='flex items-center gap-3 px-4 py-3.5 rounded-2xl hover:bg-emerald-50 active:bg-emerald-100 text-slate-800 hover:text-teal-700 text-left transition-colors font-bold text-sm'
                                             >
                                                 <span className='text-lg'>📅</span> My Appointments
@@ -122,7 +151,7 @@ const Navbar = () => {
                                             <div className='h-px bg-slate-100 my-1'></div>
 
                                             <button 
-                                                onClick={() => { setShowProfileMenu(false); logout(); }} 
+                                                onClick={() => { logout(); }} 
                                                 className='flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-red-50 hover:bg-red-100 active:bg-red-200 text-red-600 text-left transition-colors font-extrabold text-sm border border-red-100'
                                             >
                                                 <span className='text-lg'>🚪</span> Logout
