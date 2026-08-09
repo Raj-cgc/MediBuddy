@@ -2,6 +2,7 @@ import doctorModel from "../models/doctorModel.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import appointmentModel from "../models/appointmentModel.js";
+import connectDB from "../config/mongodb.js";
 
 const changeAvailability = async (req, res) => {
     try {
@@ -19,6 +20,7 @@ const changeAvailability = async (req, res) => {
 
 const doctorList = async (req, res) => {
     try {
+        await connectDB();
         const doctors = await doctorModel.find({}).select(['-password', '-email'])
         res.json({ success: true, doctors })
     } catch (error) {
